@@ -1,22 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './infra/database/database.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import configuration from './config';
+import configuration, { validate } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate,
       load: [configuration],
-      envFilePath:
-        process.env.NODE_ENV === 'production'
-          ? join(__dirname, '../.env.production')
-          : process.env.NODE_ENV === 'staging'
-          ? join(__dirname, '../.env.staging')
-          : join(__dirname, '../.env'),
+      envFilePath: join(__dirname, '../.env'),
     }),
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
