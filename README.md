@@ -12,6 +12,16 @@
 
 유다시티 컨벤션에 맞추도록 한다. [원본 링크](https://udacity.github.io/git-styleguide/)
 
+## 데이터베이스
+
+Postgresql RDBMS를 사용한다. [Postgres 설치 링크](https://www.postgresql.org/download/)
+
+초기 설치 시 Database 생성 필요
+
+```bash
+$ createdb rent_vehicle_db;
+```
+
 ## Running the app
 
 ```bash
