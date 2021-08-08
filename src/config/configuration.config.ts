@@ -20,4 +20,10 @@ export default () => ({
     },
     retryAttempts: 2,
   },
+  auth: {
+    secret: process.env.AUTH_TOKEN_PASSWORD,
+    signOptions: {
+      expiresIn: process.env.AUTH_TOKEN_EXPIRES_IN || '90 days',
+    },
+  },
 });

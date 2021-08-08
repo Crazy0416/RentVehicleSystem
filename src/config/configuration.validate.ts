@@ -1,5 +1,10 @@
 import { plainToClass } from 'class-transformer';
-import { IsNotEmpty, IsString, validateSync } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  validateSync,
+  IsOptional,
+} from 'class-validator';
 
 class EnvironmentVariables {
   @IsString({ message: 'database.config 타입 설정 필요.' })
@@ -21,6 +26,13 @@ class EnvironmentVariables {
   @IsString({ message: 'database.config database 설정 필요.' })
   @IsNotEmpty({ message: 'database.config database 설정 필요.' })
   DB_DATABASE: string;
+
+  @IsString({ message: 'auth.config secret 설정 필요' })
+  @IsNotEmpty({ message: 'auth.config secret 설정 필요' })
+  AUTH_TOKEN_PASSWORD: string;
+
+  @IsOptional()
+  AUTH_TOKEN_EXPIRES_IN: string;
 }
 
 export function validate(config: Record<string, unknown>) {
