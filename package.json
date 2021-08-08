@@ -15,7 +15,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migration:run": "npx ts-node $(yarn bin typeorm) migration:run",
+    "migration:revert": "npx ts-node $(yarn bin typeorm) migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
