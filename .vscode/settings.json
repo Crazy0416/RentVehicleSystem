@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "tslint.autoFixOnSave": true,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  "workbench.editor.enablePreview": false,
+  "todohighlight.keywords": [
+    "DEBUG:",
+    "REVIEW:",
+    "WARN:",
+    "FEATURE:",
+    "DEPRECATED:",
+    "DISCUSS:"
+  ]
+}
