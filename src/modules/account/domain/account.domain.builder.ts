@@ -7,8 +7,8 @@ import {
   validate,
 } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
+import { Account } from './account.domain';
 import * as bcrypt from 'bcrypt';
-import { User } from './user.entity';
 
 export class UserBuilder {
   @IsNumber()
@@ -57,6 +57,7 @@ export class UserBuilder {
         `${JSON.stringify(errors[0].property)} validate 오류.`,
       );
     }
-    return new User(this);
+
+    return new Account(this);
   }
 }

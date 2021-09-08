@@ -1,17 +1,38 @@
-import { User } from './../../user/domain/user.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserBuilder } from './account.domain.builder';
 
+@Entity('t_user')
 export class Account {
-  constructor(private readonly user: User) {}
-
-  public getId() {
-    return this.user.getId();
+  constructor(builder?: UserBuilder) {
+    if (builder) {
+      this.id = builder.id;
+      this.email = builder.email;
+      this.password = builder.password;
+      this.name = builder.name;
+    }
   }
 
-  public getUser(): User {
-    return this.user;
+  @PrimaryGeneratedColumn('increment')
+  public id: number;
+
+  @Column({ unique: true })
+  public email: string;
+
+  @Column()
+  public password: string;
+
+  @Column()
+  public name: string;
+
+  static get Builder() {
+    return UserBuilder;
   }
 
-  public getEmail() {
-    return this.user.getEmail();
+  public getId(): number {
+    return this.id;
+  }
+
+  public getEmail(): string {
+    return this.email;
   }
 }

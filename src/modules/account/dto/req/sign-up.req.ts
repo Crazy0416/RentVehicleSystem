@@ -1,6 +1,5 @@
 import { IsEmail, IsNotEmpty, Matches, IsString } from 'class-validator';
 import { MatchProperty } from '../../../../common/decorators/match-property.decorator';
-import { User } from '../../../user/domain/user.entity';
 import { Account } from '../../domain/account.domain';
 
 export class SignUpReq {
@@ -29,13 +28,13 @@ export class SignUpReq {
   public readonly name: string;
 
   public async toAccountDomain(): Promise<Account> {
-    const user = await (
-      await new User.Builder()
+    const account = await (
+      await new Account.Builder()
         .setEmail(this.email)
         .setName(this.name)
         .setPassword(this.password)
     ).build();
 
-    return new Account(user);
+    return account;
   }
 }
