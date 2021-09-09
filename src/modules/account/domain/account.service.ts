@@ -1,5 +1,5 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { Account } from './account.domain';
+import { Account } from './account.entity';
 import { AccountRepository } from './account.repository';
 import { DbAccountRepository } from './../infrastructure/db-account.repository';
 

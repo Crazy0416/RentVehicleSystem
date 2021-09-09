@@ -1,3 +1,4 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
@@ -15,9 +16,10 @@ import { DbAccountRepository } from './infrastructure/db-account.repository';
       },
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([DbAccountRepository]),
   ],
   controllers: [AccountV0Controller],
-  providers: [AccountService, SignService, DbAccountRepository],
+  providers: [AccountService, SignService],
   exports: [AccountService],
 })
 export class AccountModule {}

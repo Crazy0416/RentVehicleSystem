@@ -1,17 +1,22 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AccountService } from './../domain/account.service';
-import { Injectable } from '@nestjs/common';
-import { SignUpReq } from './../dto/req';
-import { SignUpRes } from './../dto/res';
+import { DbAccountRepository } from './../infrastructure/db-account.repository';
+import { AccountRepository } from './../domain/account.repository';
+import { Authenticate } from './../domain/authenticate.domain';
+import { SignUpReq, SignInReq } from './../dto/req';
+import { SignUpRes, SignInRes } from './../dto/res';
 
 @Injectable()
 export class SignService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly accountService: AccountService,
+    @Inject(DbAccountRepository)
+    private readonly accountRepository: AccountRepository,
   ) {}
 
-  public async signUp(dto: SignUpReq) {
+  public async signUp(dto: SignUpReq): Promise<SignUpRes> {
     const createdAccount = await dto.toAccountDomain();
     const savedAccount = await this.accountService.signUpAccount(
       createdAccount,
@@ -23,5 +28,23 @@ export class SignService {
     );
 
     return new SignUpRes(token);
+  }
+
+  /**
+   * @param {SignInReq} dto
+   * @returns {Promise<SignInRes>}
+   * @memberof SignService
+   * @description 사용자 로그인 서비스.
+   *              이메일 및 비밀번호로 계정을 찾은 뒤 로그인 진행.
+   *              로그인 후 jwt 토큰 발행.
+   */
+  public async signIn(dto: SignInReq): Promise<SignInRes> {
+    const { email, password } = dto;
+    const account = await this.accountRepository.findOne({ where: { email } });
+
+    const authen = new Authenticate(account, this.jwtService);
+    const token = await authen.signIn(password);
+
+    return new SignInRes(token);
   }
 }

@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserBuilder } from './account.domain.builder';
+import * as bcrypt from 'bcrypt';
 
 @Entity('t_user')
 export class Account {
@@ -34,5 +35,9 @@ export class Account {
 
   public getEmail(): string {
     return this.email;
+  }
+
+  public async comparePassword(plainPassword: string) {
+    return await bcrypt.compare(plainPassword, this.password);
   }
 }

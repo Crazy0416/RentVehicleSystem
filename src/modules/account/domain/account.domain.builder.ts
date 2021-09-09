@@ -7,7 +7,7 @@ import {
   validate,
 } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
-import { Account } from './account.domain';
+import { Account } from './account.entity';
 import * as bcrypt from 'bcrypt';
 
 export class UserBuilder {

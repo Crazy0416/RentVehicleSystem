@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, Matches, IsString } from 'class-validator';
 import { MatchProperty } from '../../../../common/decorators/match-property.decorator';
-import { Account } from '../../domain/account.domain';
+import { Account } from '../../domain/account.entity';
 
 export class SignUpReq {
   @IsEmail(

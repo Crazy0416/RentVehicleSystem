@@ -13,7 +13,7 @@ export default () => ({
     database: process.env.DB_DATABASE,
     synchronize: false,
     logging: process.env.DB_LOGGING === 'true' ? true : false,
-    entities: [join(__dirname, '../modules/**/*.entity{.ts,.js}')],
+    entities: [join(__dirname, '../modules/**/**/*.entity{.ts,.js}')],
     migrations: [join(__dirname, '../infra/database/migrations/*{.ts,.js}')],
     cli: {
       migrationsDir: 'migration',
