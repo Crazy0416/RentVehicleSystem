@@ -20,6 +20,6 @@ import { DbAccountRepository } from './infrastructure/db-account.repository';
   ],
   controllers: [AccountV0Controller],
   providers: [AccountService, SignService],
-  exports: [AccountService],
+  exports: [AccountService, TypeOrmModule],
 })
 export class AccountModule {}
