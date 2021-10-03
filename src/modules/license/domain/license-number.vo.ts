@@ -10,7 +10,6 @@ export class LicenseNumber {
   @Column({ unique: true })
   public number: string;
 
-  // DISCUSS: number랑 합쳐서 VO로 만들지 고민.
   public num1: string;
 
   public num2: string;
@@ -26,5 +25,9 @@ export class LicenseNumber {
     this.num2 = numberSplit[1];
     this.num3 = numberSplit[2];
     this.num4 = numberSplit[3];
+  }
+
+  public validateNumber() {
+    // TODO: 면허증 번호 형식 검증.
   }
 }

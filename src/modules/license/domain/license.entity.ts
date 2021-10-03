@@ -1,7 +1,9 @@
+import { ConflictException } from '@nestjs/common';
 import { LicenseNumber } from './license-number.vo';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { LicenseBuilder } from './license.domain.builder';
 import { Account } from './../../account/domain/account.entity';
+import { isAfter } from 'date-fns';
 
 @Entity('t_license')
 export class License {
@@ -12,6 +14,7 @@ export class License {
       this.birth = builder.birth;
       this.serialNumber = builder.serialNumber;
       this.userId = builder.userId;
+      this.expiredAt = builder.expiredAt;
     }
   }
 
@@ -19,7 +22,7 @@ export class License {
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   public userId: number;
 
-  @Column(() => LicenseNumber)
+  @Column(() => LicenseNumber, { prefix: false })
   public number: LicenseNumber;
 
   @Column()
@@ -31,7 +34,28 @@ export class License {
   @Column({ name: 'serial_number' })
   public serialNumber: string;
 
-  public verify() {
-    // TODO: 본인 스스로 면허증이 검증 됐는지 확인해야 함
+  @Column({ name: 'expired_datetime', type: 'date' })
+  public expiredAt: Date;
+
+  public validate(): void {
+    // 면허증 번호 검증
+    this.number.validateNumber();
+
+    // 면허증 만료일 검증
+    if (this.isExpired()) {
+      throw new ConflictException(
+        '면허증이 만료됐습니다.',
+        `${this.userId} 유저의 면허증이 만료됐습니다.`,
+      );
+    }
+  }
+
+  public isExpired(): boolean {
+    const now = new Date();
+    console.log(isAfter(this.expiredAt, now));
+    if (isAfter(this.expiredAt, now)) {
+      return false;
+    }
+    return true;
   }
 }
