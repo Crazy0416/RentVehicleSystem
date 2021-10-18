@@ -26,4 +26,8 @@ export default () => ({
       expiresIn: process.env.AUTH_TOKEN_EXPIRES_IN || '90 days',
     },
   },
+  'aes-encrypt': {
+    algorithm: process.env.AES_ENCRYPT_ALGORITHM || 'aes-256-cbc',
+    key: process.env.AES_ENCRYPT_KEY,
+  },
 });

@@ -1,3 +1,4 @@
+import { LicenseModule } from './modules/license/license.module';
 import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
@@ -19,6 +20,7 @@ import configuration, { validate } from './config';
     DatabaseModule,
     AccountModule,
     AuthModule,
+    LicenseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
