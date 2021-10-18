@@ -39,6 +39,15 @@ export class RegisterLicenseService {
     // 운전 면허증 진위 여부 검증
     await this.validateLicenseService.validate(license);
 
-    return this.licenseRepository.save(license);
+    try {
+      const savedLicense = await this.licenseRepository.save(license);
+      return savedLicense;
+    } catch (err) {
+      if (err.code && err.code === '23505') {
+        // DISCUSS: 엔티티가 이미 있으니 경고 메세지만?
+      } else {
+        throw err;
+      }
+    }
   }
 }

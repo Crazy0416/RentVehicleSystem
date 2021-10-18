@@ -1,9 +1,9 @@
 import { ConflictException } from '@nestjs/common';
+import { isAfter } from 'date-fns';
 import { LicenseNumber } from './license-number.vo';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { LicenseBuilder } from './license.domain.builder';
 import { Account } from './../../account/domain/account.entity';
-import { isAfter } from 'date-fns';
 
 @Entity('t_license')
 export class License {
@@ -52,7 +52,6 @@ export class License {
 
   public isExpired(): boolean {
     const now = new Date();
-    console.log(isAfter(this.expiredAt, now));
     if (isAfter(this.expiredAt, now)) {
       return false;
     }

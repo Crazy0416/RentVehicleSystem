@@ -9,6 +9,7 @@ export class CreateLicense1633254680975 implements MigrationInterface {
       "birth" date NOT NULL,
       "serial_number" varchar NOT NULL,
       "expired_datetime" date NOT NULL,
+      "iv" varchar NOT NULL,
       CONSTRAINT "pk_t_license_user_id" PRIMARY KEY (user_id),
       CONSTRAINT "uk_t_license_number" UNIQUE ("number"),
       CONSTRAINT "fk_t_license_t_user"

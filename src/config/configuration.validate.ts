@@ -33,6 +33,9 @@ class EnvironmentVariables {
 
   @IsOptional()
   AUTH_TOKEN_EXPIRES_IN: string;
+
+  @IsNotEmpty({ message: 'aes-encrypt key 설정 필요' })
+  AES_ENCRYPT_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {
