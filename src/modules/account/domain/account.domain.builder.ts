@@ -1,50 +1,57 @@
 import {
-  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  Matches,
+  MaxLength,
   validate,
+  IsEmail,
+  IsLowercase,
 } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
 import { Account } from './account.entity';
 import * as bcrypt from 'bcrypt';
 
 export class UserBuilder {
-  @IsNumber()
+  @IsNumber(undefined, { message: '잘못된 유저 형식입니다.' })
   @IsOptional()
   public id: number;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsLowercase({ message: '이메일 형식이 아닙니다.' })
+  @IsEmail({}, { message: '이메일 형식이 아닙니다.' })
+  @IsNotEmpty({ message: '이메일 입력이 필요합니다.' })
   public email: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @Matches(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/, {
+    message: '비밀번호는 영문+숫자 포함 8~20자리입니다.',
+  })
+  @IsNotEmpty({ message: '비밀번호를 입력해야 합니다.' })
   public password: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @MaxLength(30, { message: '이름 형식이 아닙니다.' })
+  @IsString({ message: '이름 형식이 아닙니다.' })
+  @IsNotEmpty({ message: '이름을 입력해야 합니다.' })
   public name: string;
 
-  setId(id: number) {
+  public setId(id: number) {
     this.id = id;
     return this;
   }
 
-  setEmail(email: string) {
+  public setEmail(email: string) {
     this.email = email;
     return this;
   }
 
-  async setPassword(plainPassword: string) {
+  public async setHasedPassword(plainPassword: string) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(plainPassword, salt);
     this.password = hashedPassword;
     return this;
   }
 
-  setName(name: string) {
+  public setName(name: string) {
     this.name = name;
     return this;
   }
