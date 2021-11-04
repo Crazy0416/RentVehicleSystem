@@ -1,7 +1,7 @@
 import { DefaultResponseRes } from './../../../common/dto/res/default-response.res';
 import { AuthGuard } from '@nestjs/passport';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { RegisterLicenseReq } from './../dto/req/register-license.req';
+import { RegisterLicenseReq } from './dto/req';
 import { Account } from './../../account/domain/account.entity';
 import { RegisterLicenseService } from './../application/register-license.service';
 import { UserDecorator } from './../../../common/decorators/user.decorator';
@@ -25,7 +25,8 @@ export class LicenseV0Controller {
     @Body() dto: RegisterLicenseReq,
     @UserDecorator() account: Account,
   ): Promise<DefaultResponseRes> {
-    await this.registerLicenseService.register(dto, account);
+    const serviceDto = await dto.toServiceDto(account.getId());
+    await this.registerLicenseService.register(serviceDto);
     return {
       msg: '면허증 등록 완료.',
     };

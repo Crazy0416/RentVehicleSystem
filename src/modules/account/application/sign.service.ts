@@ -3,10 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { AccountService } from './../domain/account.service';
 import { DbAccountRepository } from './../infrastructure/db-account.repository';
 import { AccountRepository } from './../domain/account.repository';
-import { Authenticate } from './../domain/authenticate.domain';
 import { Account } from '../domain/account.entity';
-import { SignUpReq } from './../dto/req';
-import { SignUpRes, SignInRes } from './../dto/res';
+import { SignUpServiceDto } from './dto';
+import { SignUpRes, SignInRes } from '../api/dto/res';
 
 @Injectable()
 export class SignService {
@@ -17,7 +16,7 @@ export class SignService {
     private readonly accountRepository: AccountRepository,
   ) {}
 
-  public async signUp(dto: SignUpReq): Promise<SignUpRes> {
+  public async signUp(dto: SignUpServiceDto): Promise<SignUpRes> {
     const createdAccount = await dto.toAccountDomain();
     const savedAccount = await this.accountService.signUpAccount(
       createdAccount,

@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { LocalAuthGuard } from './../../auth/local-auth.guard';
 import { Account } from './../domain/account.entity';
-import { SignUpReq } from './../dto/req';
-import { SignInRes } from './../dto/res/sign-in.res';
+import { SignUpReq } from './dto/req';
+import { SignInRes } from './dto/res/sign-in.res';
 
 @Controller('/v0/account')
 export class AccountV0Controller {
@@ -18,7 +18,7 @@ export class AccountV0Controller {
 
   @Post('sign-up')
   public async signUp(@Body() dto: SignUpReq) {
-    return await this.signService.signUp(dto);
+    return await this.signService.signUp(dto.toServiceDto());
   }
 
   /**
