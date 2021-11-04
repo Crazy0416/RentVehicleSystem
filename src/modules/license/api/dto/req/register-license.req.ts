@@ -1,4 +1,13 @@
-import { Matches, IsNotEmpty, IsString, Length } from 'class-validator';
+import { BadRequestException } from '@nestjs/common';
+import { parse } from 'date-fns';
+import {
+  Matches,
+  IsNotEmpty,
+  IsString,
+  Length,
+  validate,
+} from 'class-validator';
+import { RegisterLicenseServiceDto } from './../../../application/dto';
 
 export class RegisterLicenseReq {
   @Matches(/\d{2}-\d{2}-\d{6}-\d{2}/, {
@@ -27,4 +36,25 @@ export class RegisterLicenseReq {
   })
   @IsNotEmpty({ message: '만료일 날짜를 입력하세요.' })
   public expiredAt: string;
+
+  public async toServiceDto(userId: number) {
+    const dto = new RegisterLicenseServiceDto();
+    dto.number = this.number;
+    dto.serialNumber = this.serialNumber;
+    dto.birth = parse(this.birth, 'yymmdd', new Date());
+    dto.expiredAt = parse(this.birth, 'yyyy-mm-dd', new Date());
+    dto.userId = userId;
+
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      throw new BadRequestException(
+        errors[0].constraints[Object.keys(errors[0].constraints)[0]],
+        `${RegisterLicenseServiceDto.name} ${JSON.stringify(
+          errors[0].property,
+        )} validate 오류.`,
+      );
+    }
+
+    return dto;
+  }
 }
