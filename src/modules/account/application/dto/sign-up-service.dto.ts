@@ -12,7 +12,7 @@ export class SignUpServiceDto {
       await new Account.Builder()
         .setEmail(this.email)
         .setName(this.name)
-        .setHasedPassword(this.password)
+        .setPassword(this.password)
     ).build();
 
     return account;

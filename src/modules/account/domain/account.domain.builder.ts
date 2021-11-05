@@ -11,7 +11,6 @@ import {
 } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
 import { Account } from './account.entity';
-import * as bcrypt from 'bcrypt';
 
 export class UserBuilder {
   @IsNumber(undefined, { message: '잘못된 유저 형식입니다.' })
@@ -44,10 +43,8 @@ export class UserBuilder {
     return this;
   }
 
-  public async setHasedPassword(plainPassword: string) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(plainPassword, salt);
-    this.password = hashedPassword;
+  public async setPassword(plainPassword: string) {
+    this.password = plainPassword;
     return this;
   }
 
