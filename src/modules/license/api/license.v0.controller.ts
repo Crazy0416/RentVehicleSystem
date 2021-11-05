@@ -25,7 +25,7 @@ export class LicenseV0Controller {
     @Body() dto: RegisterLicenseReq,
     @UserDecorator() account: Account,
   ): Promise<DefaultResponseRes> {
-    const serviceDto = await dto.toServiceDto(account.getId());
+    const serviceDto = await dto.toServiceDto(account);
     await this.registerLicenseService.register(serviceDto);
     return {
       msg: '면허증 등록 완료.',

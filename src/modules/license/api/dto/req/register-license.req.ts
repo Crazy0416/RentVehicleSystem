@@ -1,3 +1,4 @@
+import { parseValidationErrorMessage } from 'src/util/parse-validation-error-message';
 import { BadRequestException } from '@nestjs/common';
 import { parse } from 'date-fns';
 import {
@@ -7,6 +8,7 @@ import {
   Length,
   validate,
 } from 'class-validator';
+import { Account } from './../../../../account/domain/account.entity';
 import { RegisterLicenseServiceDto } from './../../../application/dto';
 
 export class RegisterLicenseReq {
@@ -37,18 +39,19 @@ export class RegisterLicenseReq {
   @IsNotEmpty({ message: '만료일 날짜를 입력하세요.' })
   public expiredAt: string;
 
-  public async toServiceDto(userId: number) {
+  public async toServiceDto(user: Account) {
     const dto = new RegisterLicenseServiceDto();
     dto.number = this.number;
     dto.serialNumber = this.serialNumber;
     dto.birth = parse(this.birth, 'yymmdd', new Date());
-    dto.expiredAt = parse(this.birth, 'yyyy-mm-dd', new Date());
-    dto.userId = userId;
+    dto.expiredAt = parse(this.expiredAt, 'yyyy-mm-dd', new Date());
+    dto.user = user;
+    dto.name = this.name;
 
     const errors = await validate(dto);
     if (errors.length > 0) {
       throw new BadRequestException(
-        errors[0].constraints[Object.keys(errors[0].constraints)[0]],
+        parseValidationErrorMessage(errors),
         `${RegisterLicenseServiceDto.name} ${JSON.stringify(
           errors[0].property,
         )} validate 오류.`,

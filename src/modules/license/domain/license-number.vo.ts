@@ -1,13 +1,19 @@
+import { IsNotEmpty, Matches, IsString } from 'class-validator';
 import { AfterLoad, Column } from 'typeorm';
 import { AesEncryptUtil } from './../../../core/utils/aes-encrypt/aes-encrypt-util';
 
 export class LicenseNumber {
+  /**
+   * FIXME: nodejs 특성 상 process.env를 static 보다 늦게 불러온다.
+   *        추후 방법을 찾으면 static 메서드로 변경하도록 한다.
+   */
   private readonly encryptUtil = new AesEncryptUtil(
     process.env.AES_ENCRYPT_ALGORITHM,
     process.env.AES_ENCRYPT_KEY,
   );
   constructor(numberStr?: string) {
     if (numberStr) {
+      this.number = numberStr;
       this.iv = this.encryptUtil.generateIv();
       this.decryptNumber = numberStr;
       this.setEncryptNumber(numberStr);
@@ -15,12 +21,19 @@ export class LicenseNumber {
     }
   }
 
+  @IsNotEmpty({ message: '면허증 번호를 입력하세요.' })
   @Column({ unique: true })
   public number: string;
 
+  @IsString({ message: '오류가 발생했습니다.' })
+  @IsNotEmpty({ message: '오류가 발생했습니다.' })
   @Column({ comment: 'AES 복호화 시 사용하는 iv 값' })
   public iv: string;
 
+  @Matches(/\d{2}-\d{2}-\d{6}-\d{2}/, {
+    message: '면허증 번호 형식이 아닙니다.',
+  })
+  @IsNotEmpty({ message: '오류가 발생했습니다.' })
   private decryptNumber: string;
 
   private num1: string;
@@ -52,9 +65,5 @@ export class LicenseNumber {
 
   private setEncryptNumber(number: string) {
     this.number = this.encryptUtil.encode(number, this.iv);
-  }
-
-  public validateNumber() {
-    // TODO: 면허증 번호 형식 검증.
   }
 }
