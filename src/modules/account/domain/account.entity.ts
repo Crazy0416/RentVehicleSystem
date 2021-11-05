@@ -18,10 +18,11 @@ export class Account {
     if (builder) {
       this.id = builder.id;
       this.email = builder.email;
-      this.hashedPassword = this.hashPasswordSync(builder.password);
+      this.hashedPassword = builder.password;
       this.name = builder.name;
 
       this.validate();
+      this.hashedPassword = this.hashPasswordSync(builder.password);
     }
   }
 
