@@ -1,4 +1,4 @@
-import { IsNotEmpty, Matches, IsString } from 'class-validator';
+import { IsNotEmpty, Matches, IsString, validateSync } from 'class-validator';
 import { AfterLoad, Column } from 'typeorm';
 import { AesEncryptUtil } from './../../../core/utils/aes-encrypt/aes-encrypt-util';
 
@@ -18,6 +18,8 @@ export class LicenseNumber {
       this.decryptNumber = numberStr;
       this.setEncryptNumber(numberStr);
       this.setNumberSet();
+
+      this.validateProperty();
     }
   }
 
@@ -43,6 +45,13 @@ export class LicenseNumber {
   private num3: string;
 
   private num4: string;
+
+  private validateProperty() {
+    const errors = validateSync(this);
+    if (errors.length > 0) {
+      throw errors[0];
+    }
+  }
 
   @AfterLoad()
   private afterLoad() {
