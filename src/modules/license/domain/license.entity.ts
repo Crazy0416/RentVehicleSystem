@@ -2,11 +2,13 @@ import {
   IsNotEmpty,
   ValidateNested,
   IsString,
-  IsNumber,
   IsDate,
   Length,
   validateSync,
   IsOptional,
+  MaxLength,
+  IsInt,
+  MinDate,
 } from 'class-validator';
 import { ConflictException } from '@nestjs/common';
 import { isAfter } from 'date-fns';
@@ -14,6 +16,7 @@ import { LicenseNumber } from './license-number.vo';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { LicenseBuilder } from './license.domain.builder';
 import { Account } from './../../account/domain/account.entity';
+import { MinimumAge } from '../../../common/decorators/minimum-age.decorator';
 
 @Entity('t_license')
 export class License {
@@ -38,7 +41,7 @@ export class License {
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   public user?: Account;
 
-  @IsNumber(undefined, { message: '유저 정보를 입력하세요.' })
+  @IsInt({ message: '유저 정보를 입력하세요.' })
   @IsNotEmpty({ message: '유저 정보를 입력하세요.' })
   @PrimaryColumn({ name: 'user_id' })
   public userId: number;
@@ -48,11 +51,13 @@ export class License {
   @Column(() => LicenseNumber, { prefix: false })
   public number: LicenseNumber;
 
+  @MaxLength(30, { message: '이름 형식이 아닙니다.' })
   @IsString({ message: '이름을 입력하세요.' })
   @IsNotEmpty({ message: '이름을 입력하세요.' })
   @Column()
   public name: string;
 
+  @MinimumAge(18, { message: '만 18세 이상이여야 합니다.' })
   @IsDate({
     message: '생년월일 형식이 아닙니다.',
   })
@@ -66,6 +71,7 @@ export class License {
   @Column({ name: 'serial_number' })
   public serialNumber: string;
 
+  @MinDate(new Date(), { message: '만료된 면허증입니다.' })
   @IsDate({
     message: '만료일 날짜 형식이 아닙니다.',
   })

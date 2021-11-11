@@ -8,12 +8,13 @@ import {
   ValidateNested,
   IsOptional,
   IsNumber,
+  Validate,
 } from 'class-validator';
 import { License } from './license.entity';
 import { LicenseNumber } from './license-number.vo';
 import { Account } from './../../account/domain/account.entity';
-import { parse } from 'date-fns';
 import { parseValidationErrorMessage } from '../../../util/parse-validation-error-message';
+import { MinimumAge } from '../../../common/decorators/minimum-age.decorator';
 
 export class LicenseBuilder {
   @ValidateNested({ message: '면허증 번호 형식이 아닙니다.' })
@@ -32,6 +33,7 @@ export class LicenseBuilder {
   @IsNotEmpty({ message: '유저 정보 형식이 아닙니다.' })
   public userId: number;
 
+  @MinimumAge(18, { message: '만 18세 이상이여야 합니다.' })
   @IsDate({
     message: '생년월일 형식이 아닙니다.',
   })
@@ -49,8 +51,8 @@ export class LicenseBuilder {
   @IsNotEmpty({ message: '만료일 날짜를 입력하세요.' })
   public expiredAt: Date;
 
-  public setNumber(lincenseNumber: string) {
-    this.number = new LicenseNumber(lincenseNumber);
+  public setNumber(licenseNumber: LicenseNumber) {
+    this.number = licenseNumber;
     return this;
   }
 
@@ -60,13 +62,8 @@ export class LicenseBuilder {
   }
 
   public setBirth(userBirth: Date): LicenseBuilder;
-  public setBirth(userBirth: string, format: string): LicenseBuilder;
-  public setBirth(userBirth: Date | string, format?: string): LicenseBuilder {
-    if (typeof userBirth === 'string') {
-      this.birth = parse(userBirth, format, new Date());
-    } else {
-      this.birth = userBirth;
-    }
+  public setBirth(userBirth: Date): LicenseBuilder {
+    this.birth = userBirth;
     return this;
   }
 
@@ -82,7 +79,9 @@ export class LicenseBuilder {
 
   public setUser(user: Account) {
     this.user = user;
-    this.userId = user.getId();
+    if (user) {
+      this.userId = user.getId();
+    }
     return this;
   }
 
