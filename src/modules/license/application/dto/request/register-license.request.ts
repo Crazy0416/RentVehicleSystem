@@ -1,9 +1,9 @@
-import { License } from '../../domain/license.entity';
-import { Account } from './../../../account/domain/account.entity';
-import { LicenseBuilder } from './../../domain/license.domain.builder';
-import { LicenseNumber } from './../../domain/license-number.vo';
+import { License } from '../../../domain/license.entity';
+import { Account } from '../../../../account/domain/account.entity';
+import { LicenseBuilder } from '../../../domain/license.domain.builder';
+import { LicenseNumber } from '../../../domain/license-number.vo';
 
-export class RegisterLicenseServiceDto {
+export class RegisterLicenseRequest {
   public number: string;
 
   public name: string;
