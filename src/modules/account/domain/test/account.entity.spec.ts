@@ -124,7 +124,7 @@ describe('Account(계정) 엔티티 유닛 테스트', () => {
         builder.setPassword(randomPassword);
 
         account = new Account(builder);
-        expect(account.hashedPassword).not.toEqual(randomPassword);
+        expect(account.password.hashedPassword).not.toEqual(randomPassword);
       });
     });
 

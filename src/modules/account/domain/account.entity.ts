@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserBuilder } from './account.domain.builder';
-import * as bcrypt from 'bcrypt';
 import {
   IsNumber,
   IsNotEmpty,
@@ -10,7 +9,9 @@ import {
   MaxLength,
   IsOptional,
   validateSync,
+  ValidateNested,
 } from 'class-validator';
+import { Password } from './password.vo';
 
 @Entity('t_user')
 export class Account {
@@ -18,11 +19,10 @@ export class Account {
     if (builder) {
       this.id = builder.id;
       this.email = builder.email;
-      this.hashedPassword = builder.password;
+      this.password = new Password(builder.password);
       this.name = builder.name;
 
       this.validate();
-      this.hashedPassword = this.hashPasswordSync(builder.password);
     }
   }
 
@@ -37,9 +37,10 @@ export class Account {
   @Column({ unique: true })
   public email: string;
 
-  @IsNotEmpty({ message: '비밀번호 입력이 필요합니다.' })
-  @Column({ name: 'password' })
-  public hashedPassword: string;
+  @ValidateNested()
+  @IsNotEmpty({ message: '비밀번호를 입력하세요' })
+  @Column(() => Password, { prefix: false })
+  public password: Password;
 
   @MaxLength(30, { message: '이름 형식이 아닙니다.' })
   @IsString({ message: '이름 형식이 아닙니다.' })
@@ -66,12 +67,7 @@ export class Account {
     }
   }
 
-  private hashPasswordSync(plainPassword: string) {
-    const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(plainPassword, salt);
-  }
-
   public async comparePassword(plainPassword: string): Promise<boolean> {
-    return await bcrypt.compare(plainPassword, this.hashedPassword);
+    return this.password.comparePassword(plainPassword);
   }
 }
