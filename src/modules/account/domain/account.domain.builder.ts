@@ -1,15 +1,12 @@
+import { BadRequestException } from '@nestjs/common';
 import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
-  Matches,
-  MaxLength,
-  validate,
   IsEmail,
-  IsLowercase,
+  ValidationError,
 } from 'class-validator';
-import { BadRequestException } from '@nestjs/common';
 import { Account } from './account.entity';
 
 export class UserBuilder {
@@ -17,18 +14,14 @@ export class UserBuilder {
   @IsOptional()
   public id: number;
 
-  @IsLowercase({ message: '이메일 형식이 아닙니다.' })
   @IsEmail({}, { message: '이메일 형식이 아닙니다.' })
   @IsNotEmpty({ message: '이메일 입력이 필요합니다.' })
   public email: string;
 
-  @Matches(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/, {
-    message: '비밀번호는 영문+숫자 포함 8~20자리입니다.',
-  })
+  @IsString({ message: '비밀번호 형식이 아닙니다.' })
   @IsNotEmpty({ message: '비밀번호를 입력해야 합니다.' })
   public password: string;
 
-  @MaxLength(30, { message: '이름 형식이 아닙니다.' })
   @IsString({ message: '이름 형식이 아닙니다.' })
   @IsNotEmpty({ message: '이름을 입력해야 합니다.' })
   public name: string;
@@ -54,14 +47,17 @@ export class UserBuilder {
   }
 
   async build() {
-    const errors = await validate(this);
-    if (errors.length > 0) {
-      throw new BadRequestException(
-        errors[0].constraints[Object.keys(errors[0].constraints)[0]],
-        `${JSON.stringify(errors[0].property)} validate 오류.`,
-      );
+    try {
+      return new Account(this);
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        throw new BadRequestException(
+          err.constraints[Object.keys(err.constraints)[0]],
+          `${JSON.stringify(err.property)} validate 오류.`,
+        );
+      } else {
+        throw err;
+      }
     }
-
-    return new Account(this);
   }
 }

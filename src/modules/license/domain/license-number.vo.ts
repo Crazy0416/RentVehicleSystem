@@ -23,6 +23,9 @@ export class LicenseNumber {
     }
   }
 
+  @Matches(/\d{2}-\d{2}-\d{6}-\d{2}/, {
+    message: '면허증 번호 형식이 아닙니다.',
+  })
   @IsNotEmpty({ message: '면허증 번호를 입력하세요.' })
   @Column({ unique: true })
   public number: string;

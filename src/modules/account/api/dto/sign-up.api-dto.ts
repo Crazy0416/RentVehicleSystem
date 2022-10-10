@@ -11,17 +11,11 @@ export class SignUpApiDto {
   @Transform(({ value }) => value.toLowerCase().trim())
   public readonly email: string;
 
-  @Matches(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/, {
-    message: '비밀번호는 영문+숫자 포함 8~20자리입니다.',
-  })
   @IsNotEmpty({ message: '비밀번호를 입력하세요.' })
   @Transform(({ value }) => value.trim())
   public readonly password: string;
 
-  @MatchProperty('password')
-  @Matches(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/, {
-    message: '비밀번호는 영문+숫자 포함 8~20자리입니다.',
-  })
+  @MatchProperty('password', { message: '같은 비밀번호를 입력해야 합니다.' })
   @IsNotEmpty({ message: '비밀번호를 입력하세요.' })
   @Transform(({ value }) => value.trim())
   public readonly passwordCheck: string;
