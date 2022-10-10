@@ -1,4 +1,4 @@
-import { SignService } from './../application/sign.service';
+import { SignAppService } from '../application/sign.app-service';
 import {
   Body,
   Controller,
@@ -15,11 +15,11 @@ import { SignInRequest, SignUpRequest } from '../application/dto/request';
 
 @Controller('/v0/account')
 export class AccountV0Controller {
-  constructor(private readonly signService: SignService) {}
+  constructor(private readonly signAppService: SignAppService) {}
 
   @Post('sign-up')
   public async signUp(@Body() dto: SignUpApiDto) {
-    return this.signService.signUp(
+    return this.signAppService.signUp(
       new SignUpRequest(dto.email, dto.password, dto.name),
     );
   }
@@ -34,6 +34,6 @@ export class AccountV0Controller {
   @Post('sign-in')
   public async signIn(@Req() req: Request): Promise<SignInResponse> {
     const account = req.user as Account;
-    return this.signService.signIn(new SignInRequest(account));
+    return this.signAppService.signIn(new SignInRequest(account));
   }
 }

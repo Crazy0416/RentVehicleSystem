@@ -1,14 +1,14 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AccountService } from './../domain/account.service';
-import { DbAccountRepository } from './../infrastructure/db-account.repository';
-import { AccountRepository } from './../domain/account.repository';
+import { AccountService } from '../domain/account.service';
+import { DbAccountRepository } from '../infrastructure/db-account.repository';
+import { AccountRepository } from '../domain/account.repository';
 import { Account } from '../domain/account.entity';
 import { SignInRequest, SignUpRequest } from './dto/request';
 import { SignUpResponse, SignInResponse } from './dto/response';
 
 @Injectable()
-export class SignService {
+export class SignAppService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly accountService: AccountService,

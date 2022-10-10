@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { RegisterLicenseApiDto } from './dto';
 import { Account } from './../../account/domain/account.entity';
-import { RegisterLicenseService } from './../application/register-license.service';
+import { RegisterLicenseAppService } from '../application/register-license.app-service';
 import { UserDecorator } from './../../../common/decorators/user.decorator';
 import { RegisterLicenseRequest } from '../application/dto/request';
 import { parse } from 'date-fns';
@@ -11,7 +11,7 @@ import { parse } from 'date-fns';
 @Controller('/v0/license')
 export class LicenseV0Controller {
   constructor(
-    private readonly registerLicenseService: RegisterLicenseService,
+    private readonly registerLicenseAppService: RegisterLicenseAppService,
   ) {}
 
   /**
@@ -28,7 +28,7 @@ export class LicenseV0Controller {
     @UserDecorator() account: Account,
   ): Promise<DefaultResponseRes> {
     const birth = parse(dto.birth, 'yymmdd', new Date());
-    await this.registerLicenseService.register(
+    await this.registerLicenseAppService.register(
       new RegisterLicenseRequest(
         dto.number,
         dto.name,

@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { AccountV0Controller } from './api/account.v0.controller';
 import { AccountService } from './domain/account.service';
-import { SignService } from './application/sign.service';
+import { SignAppService } from './application/sign.app-service';
 import { DbAccountRepository } from './infrastructure/db-account.repository';
 
 @Module({
@@ -19,7 +19,7 @@ import { DbAccountRepository } from './infrastructure/db-account.repository';
     TypeOrmModule.forFeature([DbAccountRepository]),
   ],
   controllers: [AccountV0Controller],
-  providers: [AccountService, SignService],
+  providers: [AccountService, SignAppService],
   exports: [AccountService, TypeOrmModule],
 })
 export class AccountModule {}

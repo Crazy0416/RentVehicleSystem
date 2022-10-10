@@ -1,13 +1,13 @@
 import { RegisterLicenseRequest } from './dto/request';
 import { Inject, Injectable } from '@nestjs/common';
-import { License } from './../domain/license.entity';
-import { LicenseRepository } from './../domain/license.repository';
-import { DbLicenseRepository } from './../infrastructure/db-license.repository';
-import { ValidateLicenseService } from './../domain/validate-license.service';
+import { License } from '../domain/license.entity';
+import { LicenseRepository } from '../domain/license.repository';
+import { DbLicenseRepository } from '../infrastructure/db-license.repository';
+import { ValidateLicenseService } from '../domain/validate-license.service';
 import { LicenseNumber } from '../domain/license-number.vo';
 
 @Injectable()
-export class RegisterLicenseService {
+export class RegisterLicenseAppService {
   constructor(
     private readonly validateLicenseService: ValidateLicenseService,
     @Inject(DbLicenseRepository)
