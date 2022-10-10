@@ -1,15 +1,4 @@
-import { parseValidationErrorMessage } from 'src/util/parse-validation-error-message';
-import { BadRequestException } from '@nestjs/common';
-import { parse } from 'date-fns';
-import {
-  Matches,
-  IsNotEmpty,
-  IsString,
-  Length,
-  validate,
-} from 'class-validator';
-import { Account } from '../../../account/domain/account.entity';
-import { RegisterLicenseRequest } from '../../application/dto/request';
+import { Matches, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class RegisterLicenseApiDto {
   @Matches(/\d{2}-\d{2}-\d{6}-\d{2}/, {
@@ -38,26 +27,4 @@ export class RegisterLicenseApiDto {
   })
   @IsNotEmpty({ message: '만료일 날짜를 입력하세요.' })
   public expiredAt: string;
-
-  public async toServiceDto(user: Account) {
-    const dto = new RegisterLicenseRequest();
-    dto.number = this.number;
-    dto.serialNumber = this.serialNumber;
-    dto.birth = parse(this.birth, 'yymmdd', new Date());
-    dto.expiredAt = parse(this.expiredAt, 'yyyy-mm-dd', new Date());
-    dto.user = user;
-    dto.name = this.name;
-
-    const errors = await validate(dto);
-    if (errors.length > 0) {
-      throw new BadRequestException(
-        parseValidationErrorMessage(errors),
-        `${RegisterLicenseRequest.name} ${JSON.stringify(
-          errors[0].property,
-        )} validate 오류.`,
-      );
-    }
-
-    return dto;
-  }
 }

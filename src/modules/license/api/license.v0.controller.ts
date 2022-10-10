@@ -5,6 +5,8 @@ import { RegisterLicenseApiDto } from './dto';
 import { Account } from './../../account/domain/account.entity';
 import { RegisterLicenseService } from './../application/register-license.service';
 import { UserDecorator } from './../../../common/decorators/user.decorator';
+import { RegisterLicenseRequest } from '../application/dto/request';
+import { parse } from 'date-fns';
 
 @Controller('/v0/license')
 export class LicenseV0Controller {
@@ -25,8 +27,17 @@ export class LicenseV0Controller {
     @Body() dto: RegisterLicenseApiDto,
     @UserDecorator() account: Account,
   ): Promise<DefaultResponseRes> {
-    const serviceDto = await dto.toServiceDto(account);
-    await this.registerLicenseService.register(serviceDto);
+    const birth = parse(dto.birth, 'yymmdd', new Date());
+    await this.registerLicenseService.register(
+      new RegisterLicenseRequest(
+        dto.number,
+        dto.name,
+        account,
+        birth,
+        dto.serialNumber,
+        new Date(dto.expiredAt),
+      ),
+    );
     return {
       msg: '면허증 등록 완료.',
     };

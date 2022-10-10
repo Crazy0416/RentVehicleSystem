@@ -1,7 +1,4 @@
-import { License } from '../../../domain/license.entity';
 import { Account } from '../../../../account/domain/account.entity';
-import { LicenseBuilder } from '../../../domain/license.domain.builder';
-import { LicenseNumber } from '../../../domain/license-number.vo';
 
 export class RegisterLicenseRequest {
   public number: string;
@@ -16,16 +13,19 @@ export class RegisterLicenseRequest {
 
   public expiredAt: Date;
 
-  public async toDomain(): Promise<License> {
-    const license = await new LicenseBuilder()
-      .setNumber(new LicenseNumber(this.number))
-      .setName(this.name)
-      .setBirth(this.birth)
-      .setSerialNumber(this.serialNumber)
-      .setUser(this.user)
-      .setExpiredDate(this.expiredAt)
-      .build();
-
-    return license;
+  constructor(
+    number: string,
+    name: string,
+    user: Account,
+    birth: Date,
+    serialNumber: string,
+    expiredAt: Date,
+  ) {
+    this.number = number;
+    this.name = name;
+    this.user = user;
+    this.birth = birth;
+    this.serialNumber = serialNumber;
+    this.expiredAt = expiredAt;
   }
 }

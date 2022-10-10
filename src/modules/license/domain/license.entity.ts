@@ -86,6 +86,10 @@ export class License {
     }
   }
 
+  static get Builder() {
+    return LicenseBuilder;
+  }
+
   public validate(): void {
     // 면허증 정보 검증
     this.validateProperty();
