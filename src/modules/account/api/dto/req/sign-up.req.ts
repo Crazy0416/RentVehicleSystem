@@ -1,7 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, Matches, IsString } from 'class-validator';
 import { MatchProperty } from '../../../../../common/decorators/match-property.decorator';
-import { SignUpServiceDto } from './../../../application/dto/sign-up-service.dto';
 
 export class SignUpReq {
   @IsEmail(
@@ -30,13 +29,4 @@ export class SignUpReq {
   @IsString({ message: '이름을 입력하세요.' })
   @IsNotEmpty({ message: '이름을 입력하세요.' })
   public readonly name: string;
-
-  public toServiceDto(): SignUpServiceDto {
-    const dto = new SignUpServiceDto();
-    dto.email = this.email;
-    dto.name = this.name;
-    dto.password = this.password;
-
-    return dto;
-  }
 }

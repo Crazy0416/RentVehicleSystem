@@ -43,7 +43,7 @@ export class UserBuilder {
     return this;
   }
 
-  public async setPassword(plainPassword: string) {
+  public setPassword(plainPassword: string) {
     this.password = plainPassword;
     return this;
   }
