@@ -1,4 +1,4 @@
-export class SignUpRes {
+export class SignInResponse {
   constructor(token: string) {
     this.token = token;
   }

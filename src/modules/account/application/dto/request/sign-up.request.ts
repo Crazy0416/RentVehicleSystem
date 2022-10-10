@@ -1,4 +1,4 @@
-export class SignUpServiceDto {
+export class SignUpRequest {
   public email: string;
 
   public password: string;

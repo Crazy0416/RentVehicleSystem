@@ -1,6 +1,6 @@
-import { Account } from '../../domain/account.entity';
+import { Account } from '../../../domain/account.entity';
 
-export class SignInServiceDto {
+export class SignInRequest {
   public account: Account;
 
   constructor(account: Account) {

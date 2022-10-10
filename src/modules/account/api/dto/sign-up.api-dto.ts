@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, Matches, IsString } from 'class-validator';
-import { MatchProperty } from '../../../../../common/decorators/match-property.decorator';
+import { MatchProperty } from '../../../../common/decorators/match-property.decorator';
 
-export class SignUpReq {
+export class SignUpApiDto {
   @IsEmail(
     {},
     { message: '이메일 형식이 아닙니다.\n이메일을 다시 입력하세요.' },
